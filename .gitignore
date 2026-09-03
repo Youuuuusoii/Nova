@@ -72,3 +72,8 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Third-party / replaceable assets
+/Content/ParagonAurora/
+/Content/ParagonKwang/
+/Content/StarterContent/
