@@ -72,16 +72,20 @@ void ANovaAbilitySpawner::ImmediateSpawnActors()
 
 void ANovaAbilitySpawner::ProcessNextSpawn()
 {
-	if (!PooledActors.IsValidIndex(CurrentSpawnIndex) || !SpawnActorsTransform.IsValidIndex(CurrentSpawnIndex))
-	{
-		LOG(TEXT("CurrentSpawnIndex : : %d"), CurrentSpawnIndex);
-		return;
-	}
-
 	if (CurrentSpawnIndex >= SpawnActorsTransform.Num())
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 		SetActorHiddenInGame(true);
+		return;
+	}
+
+	if(!PooledActors.IsValidIndex(CurrentSpawnIndex) ||	!SpawnActorsTransform.IsValidIndex(CurrentSpawnIndex))
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+		SetActorHiddenInGame(true);
+
+		LOG(TEXT("PooledActors IsValideIndex : %s"), PooledActors.IsValidIndex(CurrentSpawnIndex) ? TEXT("true") : TEXT("false"));
+		LOG(TEXT("SpawnActorsTransform IsValideIndex : %s"), SpawnActorsTransform.IsValidIndex(CurrentSpawnIndex) ? TEXT("true") : TEXT("false"));
 		return;
 	}
 

@@ -30,6 +30,8 @@ void UNovaGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		return;
 	}
 
+	InitAbility();
+
 	UNovaAbilityTask_MontageAndEvent* PlayMontageAndWaitForEvent = 	UNovaAbilityTask_MontageAndEvent::PlayMontageAndWaitForEvent(
 			this,
 			NAME_None,
@@ -52,8 +54,6 @@ void UNovaGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, true);
 		return;
 	}
-
-	InitAbility();
 }
 
 ACharacterBase* UNovaGameplayAbility::GetCharacterBaseFromActorInfo()

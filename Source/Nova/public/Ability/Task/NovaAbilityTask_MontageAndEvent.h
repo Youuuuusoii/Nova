@@ -77,4 +77,5 @@ private:
 	FDelegateHandle CancelledHandle;
 	FDelegateHandle EventHandle;
 	
+	TWeakObjectPtr<UAnimInstance>	ActorAnimInstance;
 };

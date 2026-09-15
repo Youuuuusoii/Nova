@@ -41,8 +41,13 @@ void UNovaAbilityTask_MontageAndEvent::Activate()
 	if (UAbilitySystemComponent* ASC = AbilitySystemComponent.Get())
 	{
 		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
-		UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
-		if (AnimInstance != nullptr)
+
+		if (!ActorAnimInstance.IsValid())
+		{
+			ActorAnimInstance = ActorInfo->GetAnimInstance();
+		}
+
+		if (UAnimInstance* AnimInstance = ActorAnimInstance.Get())
 		{
 			// 게임플레이 이벤트 수신 바인딩
 			EventHandle = ASC->AddGameplayEventTagContainerDelegate(EventTags, FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this, &UNovaAbilityTask_MontageAndEvent::OnGameplayEvent));
@@ -92,16 +97,16 @@ void UNovaAbilityTask_MontageAndEvent::OnDestroy(bool AbilityEnded)
 		AbilitySystemComponent->RemoveGameplayEventTagContainerDelegate(EventTags, EventHandle);
 	}
 
-	if (Ability)
+	if (Ability && CancelledHandle.IsValid())
 	{
-		Ability->OnGameplayAbilityCancelled.Clear();
+		Ability->OnGameplayAbilityCancelled.Remove(CancelledHandle);
+		CancelledHandle.Reset();
+	}
 
-		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
-		UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->OnMontageBlendingOut.Clear();
-		}
+	if (UAnimInstance* AnimInstance = ActorAnimInstance.Get())
+	{
+		AnimInstance->OnMontageBlendingOut.RemoveDynamic(this, &UNovaAbilityTask_MontageAndEvent::OnMontageBlendingOut);
+		ActorAnimInstance.Reset();
 	}
 
 	Super::OnDestroy(AbilityEnded);
