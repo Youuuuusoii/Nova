@@ -92,6 +92,18 @@ void UNovaAbilityTask_MontageAndEvent::OnDestroy(bool AbilityEnded)
 		AbilitySystemComponent->RemoveGameplayEventTagContainerDelegate(EventTags, EventHandle);
 	}
 
+	if (Ability)
+	{
+		Ability->OnGameplayAbilityCancelled.Clear();
+
+		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
+		UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
+		if (AnimInstance != nullptr)
+		{
+			AnimInstance->OnMontageBlendingOut.Clear();
+		}
+	}
+
 	Super::OnDestroy(AbilityEnded);
 }
 

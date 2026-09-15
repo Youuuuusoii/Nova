@@ -50,6 +50,7 @@ void UNovaGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	else
 	{
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, true);
+		return;
 	}
 
 	InitAbility();

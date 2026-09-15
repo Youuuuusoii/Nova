@@ -51,6 +51,9 @@ public:
 	UFUNCTION()
 	void OnAbilityCancelled();
 
+	UFUNCTION()
+	void OnMontageBlendingOut(UAnimMontage* Montage, bool bInterrupted);
+
 protected:
 	virtual void Activate() override;
 	virtual void ExternalCancel() override;
@@ -58,7 +61,6 @@ protected:
 	virtual void OnDestroy(bool AbilityEnded) override;
 
 	bool StopPlayingMontage();
-	void OnMontageBlendingOut(UAnimMontage* Montage, bool bInterrupted);
 	void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	void OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload);
 

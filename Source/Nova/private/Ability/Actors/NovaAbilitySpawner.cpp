@@ -72,6 +72,12 @@ void ANovaAbilitySpawner::ImmediateSpawnActors()
 
 void ANovaAbilitySpawner::ProcessNextSpawn()
 {
+	if (!PooledActors.IsValidIndex(CurrentSpawnIndex) || !SpawnActorsTransform.IsValidIndex(CurrentSpawnIndex))
+	{
+		LOG(TEXT("CurrentSpawnIndex : : %d"), CurrentSpawnIndex);
+		return;
+	}
+
 	if (CurrentSpawnIndex >= SpawnActorsTransform.Num())
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
