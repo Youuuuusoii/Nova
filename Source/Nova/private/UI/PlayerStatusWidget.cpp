@@ -14,6 +14,8 @@
 
 void UPlayerStatusWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	if (ANovaPlayerController* NovaController = Cast<ANovaPlayerController>(GetOwningPlayer()))
 	{
 		if (ANovaPlayerState* NovaPS = Cast<ANovaPlayerState>(NovaController->PlayerState))

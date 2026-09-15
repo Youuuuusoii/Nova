@@ -31,5 +31,8 @@ public:
 protected:
 	void NativeConstruct() override;
 	void UpdateHelathBar();
+
+public:
+	UFUNCTION()
 	void BindPlayerStauts(class ANovaPlayerController* PlayerController ,class ANovaPlayerState* PlayerState);
 };

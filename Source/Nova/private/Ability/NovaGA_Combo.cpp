@@ -13,6 +13,7 @@ UNovaGA_Combo::UNovaGA_Combo()
 	:SectionID(0),
 	bInputEvent(false)
 {
+
 }
 
 void UNovaGA_Combo::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)

@@ -58,4 +58,7 @@ protected:
 
 	UFUNCTION()
 	void OnAbilityCancelled(FGameplayTag EventTag, FGameplayEventData EventData);
+
+	UFUNCTION()
+	void OnAbilityInterrupted(FGameplayTag EventTag, FGameplayEventData EventData);
 };

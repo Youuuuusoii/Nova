@@ -12,6 +12,7 @@
 UNovaGameplayAbility::UNovaGameplayAbility()
 	:PlaySectionName(NAME_None)
 {
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
 void UNovaGameplayAbility::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility)
@@ -26,6 +27,7 @@ void UNovaGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	if (!CommitAbility(Handle, ActorInfo, ActivationInfo) || !AbilityMontage)
 	{
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, true);
+		return;
 	}
 
 	UNovaAbilityTask_MontageAndEvent* PlayMontageAndWaitForEvent = 	UNovaAbilityTask_MontageAndEvent::PlayMontageAndWaitForEvent(
@@ -40,6 +42,7 @@ void UNovaGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	{
 		PlayMontageAndWaitForEvent->OnCancelled.AddDynamic(this, &UNovaGameplayAbility::OnAbilityCancelled);
 		PlayMontageAndWaitForEvent->OnCompleted.AddDynamic(this, &UNovaGameplayAbility::OnMontageCompleted);
+		PlayMontageAndWaitForEvent->OnInterrupted.AddDynamic(this, &UNovaGameplayAbility::OnAbilityInterrupted);
 		PlayMontageAndWaitForEvent->EventReceived.AddDynamic(this, &UNovaGameplayAbility::EventReceived);
 
 		PlayMontageAndWaitForEvent->ReadyForActivation();
@@ -87,6 +90,11 @@ void UNovaGameplayAbility::OnMontageCompleted(FGameplayTag EventTag, FGameplayEv
 }
 
 void UNovaGameplayAbility::OnAbilityCancelled(FGameplayTag EventTag, FGameplayEventData EventData)
+{
+	OnEndAbility();
+}
+
+void UNovaGameplayAbility::OnAbilityInterrupted(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	OnEndAbility();
 }

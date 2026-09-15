@@ -7,9 +7,9 @@
 
 // Sets default values
 ANovaPooledActor::ANovaPooledActor()
+	:bIsCollision(false)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
@@ -21,13 +21,13 @@ ANovaPooledActor::ANovaPooledActor()
 	SetActorHiddenInGame(true);
 }
 
-// Called when the game starts or when spawned
 void ANovaPooledActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Deactivate();
 }
 
-// Called every frame
 void ANovaPooledActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -36,15 +36,23 @@ void ANovaPooledActor::Tick(float DeltaTime)
 
 void ANovaPooledActor::Activation()
 {
-	SetActorHiddenInGame(false);
+	GetWorldTimerManager().ClearTimer(LifeTimerHandle);
 
-	GetWorldTimerManager().SetTimer(LifeTimerHandle, this, &ANovaPooledActor::Deactivate, LifeTime, true);
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(bIsCollision);
+
+	if (LifeTime > 0.f)
+	{
+		GetWorldTimerManager().SetTimer(LifeTimerHandle, this, &ANovaPooledActor::Deactivate, LifeTime, false);
+	}
 }
 
 void ANovaPooledActor::Deactivate()
 {
-	SetActorHiddenInGame(true);
-
 	GetWorldTimerManager().ClearTimer(LifeTimerHandle);
+
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
 }
 

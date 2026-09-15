@@ -14,7 +14,7 @@ class NOVA_API UNovaHUD : public UNovaCommonActivatableWidget
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(meta = (WidgetBind))
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UPlayerStatusWidget>	PlayerStatusWidget;
 
 public:

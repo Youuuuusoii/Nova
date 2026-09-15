@@ -53,7 +53,13 @@ void ANovaAbilitySpawner::ImmediateSpawnActors()
 {
 	for (int32 Index = 0; Index < ActorCount; ++Index)
 	{
+		if (!PooledActors.IsValidIndex(Index) || !SpawnActorsTransform.IsValidIndex(Index))
+		{
+			return;
+		}
+
 		ANovaPooledActor* PooledActor = PooledActors[Index];
+
 		if (PooledActor)
 		{
 			PooledActor->SetActorTransform(SpawnActorsTransform[Index]);

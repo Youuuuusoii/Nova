@@ -6,7 +6,7 @@
 
 ANovaAbilityActor::ANovaAbilityActor()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AbilityMesh"));
 

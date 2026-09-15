@@ -34,9 +34,9 @@ void ANovaPlayerController::BeginPlay()
 		}
 	}
 
-	if (ACharacterBase* PlayerCharacter = Cast<ACharacterBase>(GetPawn()))
+	if (ANovaPlayerState* PS = GetPlayerState<ANovaPlayerState>())
 	{
-		NovaAbilitySystemComponent = Cast<UNovaAbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+		NovaAbilitySystemComponent = Cast<UNovaAbilitySystemComponent>(PS->GetAbilitySystemComponent());
 	}
 }
 

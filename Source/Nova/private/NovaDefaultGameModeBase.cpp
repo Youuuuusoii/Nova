@@ -45,7 +45,13 @@ void ANovaDefaultGameModeBase::OnPlayerClassLoaded(APlayerController* PlayerCont
 		return;
 	}
 
-	//나중에 수정 해야하는 코드
+	//캐릭터 선택 구현 전까지 첫번째 데이터를 사용한다.
+	if (!CharacterDataSubsystem->LoadedPlayerDataArray.IsValidIndex(0))
+	{
+		LOG(TEXT("No loaded PlayerData."));
+		return;
+	}
+
 	UNovaCharacterData* PlayerData = CharacterDataSubsystem->LoadedPlayerDataArray[0];
 
 	if (!PlayerData || PlayerData->CharacterPawn.IsNull())
@@ -53,6 +59,7 @@ void ANovaDefaultGameModeBase::OnPlayerClassLoaded(APlayerController* PlayerCont
 		LOG(TEXT("No PlayerData."));
 		return;
 	}
+	//
 
 	if (UClass* LoadedClass = PlayerData->CharacterPawn.LoadSynchronous())
 	{

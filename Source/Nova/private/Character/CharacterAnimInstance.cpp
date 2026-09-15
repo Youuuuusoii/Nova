@@ -46,7 +46,7 @@ void UCharacterAnimInstance::UpdateLocationData(float DeltaSeconds)
 		return;
 	}
 
-	FVector ActorLocation = CharacterPawn->GetActorLocation();
+	const FVector ActorLocation = CharacterPawn->GetActorLocation();
 
 	FVector CurrentLocation = ActorLocation - WorldLocation;
 	CurrentLocation.Z = 0.f;
@@ -70,39 +70,38 @@ void UCharacterAnimInstance::UpdateVelocityData()
 {
 	if (!CharacterPawn.IsValid())
 	{
+		WorldVelocity = FVector::ZeroVector;
+		LocalVelocity = FVector::ZeroVector;
 		return;
 	}
 
 	WorldVelocity = CharacterPawn->GetVelocity();
+	WorldRotation = CharacterPawn->GetActorRotation();
 
-	FVector WorldVelocity2D = WorldVelocity * FVector(1.0f, 1.0f, 0.0f);
+	const FVector HorizontalVelocity = FVector(WorldVelocity.X, WorldVelocity.Y, 0.0f);
 
-	LocalVelocity = WorldRotation.UnrotateVector(WorldVelocity2D);
+	LocalVelocity = WorldRotation.UnrotateVector(HorizontalVelocity);
 }
 
 void UCharacterAnimInstance::InAirState()
 {
-	bJumping = bFalling = false;
+	bJumping = false;
+	bFalling = false;
+	bGround = false;
+	bIsAcceleration = false;
 
 	if (!OwnerCharacterMovement.IsValid())
 	{
 		return;
 	}
 
-	FVector Acceleration = OwnerCharacterMovement->GetCurrentAcceleration();
+	bGround = OwnerCharacterMovement->IsMovingOnGround();
+	bIsAcceleration = !OwnerCharacterMovement->GetCurrentAcceleration().IsNearlyZero();
 
-	bIsAcceleration = (Acceleration.SquaredLength() > 0.f);
-
-	if (EMovementMode::MOVE_Falling == OwnerCharacterMovement->MovementMode)
+	if (OwnerCharacterMovement->IsFalling())
 	{
-		if (WorldVelocity.Z > 0.f)
-		{
-			bJumping = true;
-		}
-		else
-		{
-			bFalling = true;
-		}
+		bJumping = WorldVelocity.Z > 0.f;
+		bFalling = !bJumping;
 	}
 
 }
