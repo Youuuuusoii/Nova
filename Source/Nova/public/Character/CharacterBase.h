@@ -32,6 +32,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
 
+	virtual void InitCharacterData(class UNovaCharacterData* CharacterData);
+
 	void SetCharacterMesh(TSoftObjectPtr<USkeletalMesh> CharacterMeshObject);
 	void SetCharacterAnimInstance(TSoftClassPtr<UAnimInstance> CharacterAnimClass);
 

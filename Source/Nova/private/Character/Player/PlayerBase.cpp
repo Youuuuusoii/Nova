@@ -93,30 +93,11 @@ void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	}	
 }
 
-void APlayerBase::InitCharacterData(UNovaCharacterData* PlayerData)
+void APlayerBase::InitCharacterData(UNovaCharacterData* CharacterData)
 {
-	if (USkeletalMesh * LoadedMesh = PlayerData->CharacterMesh.LoadSynchronous())
-	{
-		GetMesh()->SetSkeletalMesh(LoadedMesh);
-	}
+	Super::InitCharacterData(CharacterData);
 
-	if (UClass* LoadedAnimClass = PlayerData->CharacterAnim.LoadSynchronous())
-	{
-		GetMesh()->SetAnimInstanceClass(LoadedAnimClass);
-
-		CharacterAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-
-		if (CharacterAnimInstance.IsValid())
-		{
-			CharacterAnimInstance->InitializeCharacterAnimtaion(this);
-		}
-	}
-
-	if (AbilitySystemComponent)
-	{
-		AddAbilities(PlayerData->CharacterAbility);
-		InitAttribute(PlayerData->InitStatEffect);
-	}
+	CharacterAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 void APlayerBase::Input_Move(const FInputActionValue& IAValue)

@@ -32,9 +32,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void InitCharacterData(class UNovaCharacterData* PlayerData);
 	
+	virtual void InitCharacterData(class UNovaCharacterData* CharacterData) override;
+
 	void Input_Move(const FInputActionValue& IAValue);
 	void Input_AbilityTriggered(FGameplayTag InputTag);
 	void Input_AbilityCompleted(FGameplayTag InputTag);

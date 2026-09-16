@@ -9,6 +9,7 @@
 #include "GameplayTagContainer.h"
 
 #include "Data/NovaAbilityData.h"
+#include "Data/NovaCharacterData.h"
 
 #include "NovaLogChannels.h"
 #include "GameplayEffectTypes.h" 
@@ -26,6 +27,30 @@ void ACharacterBase::BeginPlay()
 UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ACharacterBase::InitCharacterData(UNovaCharacterData* CharacterData)
+{
+	if (USkeletalMesh* LoadedMesh = CharacterData->CharacterMesh.LoadSynchronous())
+	{
+		GetMesh()->SetSkeletalMesh(LoadedMesh);
+	}
+
+	if (UClass* LoadedAnimClass = CharacterData->CharacterAnim.LoadSynchronous())
+	{
+		GetMesh()->SetAnimInstanceClass(LoadedAnimClass);
+
+		if (CharacterAnimInstance.IsValid())
+		{
+			CharacterAnimInstance->InitializeCharacterAnimtaion(this);
+		}
+	}
+
+	if (AbilitySystemComponent)
+	{
+		AddAbilities(CharacterData->CharacterAbility);
+		InitAttribute(CharacterData->InitStatEffect);
+	}
 }
 
 void ACharacterBase::InitAttribute(TSubclassOf<class UGameplayEffect> InitStatEffect)
